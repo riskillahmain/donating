@@ -98,7 +98,7 @@ export default function DonationForm({ streamerName, streamerId, allowMedia = tr
         <motion.div
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
-          type="spring"
+          transition={{ type: "spring" }}
           className="mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-[#d1f0e1] text-4xl"
         >
           🎉
