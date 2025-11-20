@@ -72,7 +72,7 @@ const themes: Record<ThemeOption, {
 };
 
 // ... rowVariant ...
-const rowVariant = {
+const rowVariant: Variants = {
   hidden: { opacity: 0, y: 20, scale: 0.96 },
   visible: (i: number) => ({
     opacity: 1,
