@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, Suspense } from "react";
 import { createClient } from "@/utils/supabase/client";
 import DonationLeaderboard from "@/components/overlay/leaderboard/v1";
 import { useSearchParams } from "next/navigation";
@@ -25,7 +25,7 @@ type RawDonation = {
   amount: number;
 };
 
-export default function LeaderboardOverlayPage() {
+function LeaderboardContent() {
   const searchParams = useSearchParams();
   const key = searchParams.get("key");
   const supabase = createClient();
@@ -131,5 +131,13 @@ export default function LeaderboardOverlayPage() {
       subtitle={settings.subtitle}
       theme={settings.theme}
     />
+  );
+}
+
+export default function LeaderboardOverlayPage() {
+  return (
+    <Suspense fallback={<div className="text-white">Loading...</div>}>
+      <LeaderboardContent />
+    </Suspense>
   );
 }

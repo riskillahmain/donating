@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { createClient } from "@/utils/supabase/client";
 import DonationTicker from "@/components/overlay/ticker/v1";
 import { useSearchParams } from "next/navigation";
@@ -20,7 +20,7 @@ type DonationTickerItem = {
   avatar?: string;
 };
 
-export default function TickerOverlayPage() {
+function TickerContent() {
   const searchParams = useSearchParams();
   const key = searchParams.get("key");
   const supabase = createClient();
@@ -130,5 +130,13 @@ export default function TickerOverlayPage() {
       title={settings.title}
       theme={settings.theme}
     />
+  );
+}
+
+export default function TickerOverlayPage() {
+  return (
+    <Suspense fallback={<div className="text-white">Loading...</div>}>
+      <TickerContent />
+    </Suspense>
   );
 }
