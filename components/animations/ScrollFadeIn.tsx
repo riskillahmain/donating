@@ -8,7 +8,7 @@ const defaultVariants = {
 };
 
 type Props = {
-  as?: keyof JSX.IntrinsicElements;
+  as?: keyof React.JSX.IntrinsicElements;
   children: React.ReactNode;
   className?: string;
   amount?: number;
@@ -21,9 +21,10 @@ export default function ScrollFadeIn({
   amount = 0.35,
   ...motionProps
 }: Props) {
+  const MotionComponent = (motion as any)[Component];
+
   return (
-    <motion.div
-      as={Component as never}
+    <MotionComponent
       className={className}
       variants={defaultVariants}
       initial="hidden"
@@ -33,6 +34,6 @@ export default function ScrollFadeIn({
       {...motionProps}
     >
       {children}
-    </motion.div>
+    </MotionComponent>
   );
 }

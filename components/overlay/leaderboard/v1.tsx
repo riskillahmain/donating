@@ -80,7 +80,7 @@ const rowVariant = {
     scale: 1,
     transition: {
       delay: 0.05 * i,
-      type: "spring",
+      type: "spring" as const,
       stiffness: 240,
       damping: 20,
     },
