@@ -41,7 +41,7 @@ export default function LeaderboardOverlaySettingsPage() {
           return;
         }
 
-        let { data: existingData, error } = await supabase
+        const { data: existingData, error } = await supabase
           .from('overlay_leaderboards')
           .select('*')
           .eq('streamer_id', user.id)

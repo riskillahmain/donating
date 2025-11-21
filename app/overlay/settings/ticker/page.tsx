@@ -47,7 +47,7 @@ export default function TickerOverlaySettingsPage() {
           return;
         }
 
-        let { data: existingData, error } = await supabase
+        const { data: existingData, error } = await supabase
           .from('overlay_tickers')
           .select('*')
           .eq('streamer_id', user.id)

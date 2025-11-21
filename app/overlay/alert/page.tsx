@@ -14,14 +14,24 @@ type AlertSettings = {
   theme: 'pink' | 'blue' | 'green' | 'purple';
 };
 
+type Donation = {
+  sender_name: string;
+  amount: number;
+  message?: string;
+  avatar_url?: string;
+  youtube_url?: string;
+  tiktok_url?: string;
+  instagram_url?: string;
+};
+
 export default function AlertOverlayPage() {
   const searchParams = useSearchParams();
   const key = searchParams.get("key");
   const supabase = createClient();
 
   const [settings, setSettings] = useState<AlertSettings | null>(null);
-  const [currentDonation, setCurrentDonation] = useState<any>(null);
-  const [queue, setQueue] = useState<any[]>([]);
+  const [currentDonation, setCurrentDonation] = useState<Donation | null>(null);
+  const [queue, setQueue] = useState<Donation[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -67,7 +77,7 @@ export default function AlertOverlayPage() {
           },
           (payload) => {
             console.log('New donation received:', payload);
-            setQueue((prev) => [...prev, payload.new]);
+            setQueue((prev) => [...prev, payload.new as Donation]);
           }
         )
         .subscribe((status) => {

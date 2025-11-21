@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { createClient } from "@/utils/supabase/client";
 import DonationLeaderboard from "@/components/overlay/leaderboard/v1";
 import { useSearchParams } from "next/navigation";
@@ -20,34 +20,36 @@ type Donor = {
   avatar?: string;
 };
 
+type RawDonation = {
+  sender_name: string;
+  amount: number;
+};
+
 export default function LeaderboardOverlayPage() {
   const searchParams = useSearchParams();
   const key = searchParams.get("key");
   const supabase = createClient();
 
   const [settings, setSettings] = useState<LeaderboardSettings | null>(null);
-  const [donors, setDonors] = useState<Donor[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [rawDonations, setRawDonations] = useState<any[]>([]);
+  const [rawDonations, setRawDonations] = useState<RawDonation[]>([]);
 
   // Recalculate donors whenever raw data changes
-  useEffect(() => {
+  const donors = useMemo<Donor[]>(() => {
     const map: Record<string, number> = {};
     rawDonations.forEach((d) => {
       const name = d.sender_name || "Anonim";
       map[name] = (map[name] || 0) + d.amount;
     });
 
-    const aggregated: Donor[] = Object.entries(map)
+    return Object.entries(map)
       .map(([name, amount]) => ({
         name,
         amount,
         avatar: undefined
       }))
       .sort((a, b) => b.amount - a.amount); // Sort by highest amount
-
-    setDonors(aggregated);
   }, [rawDonations]);
 
   useEffect(() => {
@@ -103,7 +105,7 @@ export default function LeaderboardOverlayPage() {
             filter: `streamer_id=eq.${streamerId}`,
           },
           (payload) => {
-            setRawDonations((prev) => [...prev, payload.new]);
+            setRawDonations((prev) => [...prev, payload.new as RawDonation]);
           }
         )
         .subscribe();

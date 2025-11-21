@@ -28,8 +28,8 @@ export default function ForgotPasswordPage() {
       }
 
       setSuccess(true);
-    } catch (err: any) {
-      setError(err.message || "Gagal mengirim permintaan. Coba lagi.");
+    } catch (err: unknown) {
+      setError((err as Error).message || "Gagal mengirim permintaan. Coba lagi.");
     } finally {
       setLoading(false);
     }

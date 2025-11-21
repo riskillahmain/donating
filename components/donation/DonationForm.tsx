@@ -57,7 +57,7 @@ export default function DonationForm({ streamerName, streamerId, allowMedia = tr
 
     try {
       // Insert to database
-      const donationData: Record<string, any> = {
+      const donationData: Record<string, string | number | undefined> = {
         streamer_id: streamerId,
         sender_name: senderName || "Anonim",
         message: message,
