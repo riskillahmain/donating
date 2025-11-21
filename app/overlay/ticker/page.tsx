@@ -32,9 +32,11 @@ export default function TickerOverlayPage() {
 
   useEffect(() => {
     if (!key) {
-      setError("Missing overlay key");
-      setLoading(false);
-      return;
+      const timer = setTimeout(() => {
+        setError("Missing overlay key");
+        setLoading(false);
+      }, 0);
+      return () => clearTimeout(timer);
     }
 
     const init = async () => {

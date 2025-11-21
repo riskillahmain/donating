@@ -2,7 +2,6 @@
 
 import * as React from "react";
 import RetroShell from "@/components/layout/RetroShell";
-import ScrollFadeIn from "@/components/animations/ScrollFadeIn";
 import DonationTicker from "@/components/overlay/ticker/v1";
 import { SettingRow, SoftToggle, SoftInput, ThemeSelector, type ThemeOption } from "@/components/settings/SettingsUI";
 import { createClient } from "@/utils/supabase/client";
@@ -18,7 +17,7 @@ const baseItems = [
 import OverlaySettingsSkeleton from "@/components/skeletons/OverlaySettingsSkeleton";
 
 export default function TickerOverlaySettingsPage() {
-  const supabase = createClient();
+  const [supabase] = React.useState(() => createClient());
   const router = useRouter();
 
   const [loading, setLoading] = React.useState(true);
@@ -48,11 +47,13 @@ export default function TickerOverlaySettingsPage() {
           return;
         }
 
-        let { data, error } = await supabase
+        let { data: existingData, error } = await supabase
           .from('overlay_tickers')
           .select('*')
           .eq('streamer_id', user.id)
           .single();
+
+        let data = existingData;
 
         if (error && error.code === 'PGRST116') {
           const { data: newData, error: createError } = await supabase
@@ -95,7 +96,7 @@ export default function TickerOverlaySettingsPage() {
     };
 
     loadSettings();
-  }, []);
+  }, [supabase, router]);
 
   const saveSettings = async () => {
     if (loading) return;

@@ -2,12 +2,10 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import AuthLayout from "@/components/auth/AuthLayout";
 import { createClient } from "@/utils/supabase/client";
 
 export default function RegisterPage() {
-  const router = useRouter();
   const supabase = createClient();
   
   const [email, setEmail] = useState("");
@@ -46,8 +44,8 @@ export default function RegisterPage() {
       }
 
       setSuccess(true);
-    } catch (err: any) {
-      setError(err.message || "Gagal mendaftar. Coba lagi ya.");
+    } catch (err: unknown) {
+      setError((err as Error).message || "Gagal mendaftar. Coba lagi ya.");
     } finally {
       setLoading(false);
     }

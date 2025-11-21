@@ -15,9 +15,7 @@ const navItems = [
   { href: "/overlay/settings/ticker", label: "Ticker overlay", icon: "➝", badge: "OBS" },
 ];
 
-type Props = {};
-
-export default function RetroSidebar({}: Props) {
+export default function RetroSidebar() {
   const pathname = usePathname();
   const router = useRouter();
   const supabase = createClient();

@@ -6,6 +6,8 @@ import ScrollFadeIn from "@/components/animations/ScrollFadeIn";
 import { createClient } from "@/utils/supabase/client";
 import { SettingRow, SoftInput, SoftToggle } from "@/components/settings/SettingsUI";
 import { useRouter } from "next/navigation";
+import { User } from "@supabase/supabase-js";
+import Image from "next/image";
 
 export default function SettingsPage() {
   const supabase = createClient();
@@ -13,7 +15,7 @@ export default function SettingsPage() {
   
   const [loading, setLoading] = React.useState(true);
   const [saving, setSaving] = React.useState(false);
-  const [user, setUser] = React.useState<any>(null);
+  const [user, setUser] = React.useState<User | null>(null);
   
   // Form State
   const [username, setUsername] = React.useState("");
@@ -116,8 +118,8 @@ export default function SettingsPage() {
       if (error) throw error;
 
       alert("Profil berhasil diperbarui!");
-    } catch (error: any) {
-      alert(error.message || "Gagal memperbarui profil.");
+    } catch (error: unknown) {
+      alert((error as Error).message || "Gagal memperbarui profil.");
     } finally {
       setSaving(false);
     }
@@ -142,10 +144,12 @@ export default function SettingsPage() {
             <div className="flex flex-col items-center gap-3 sm:items-start">
               <div className="relative h-24 w-24 overflow-hidden rounded-full border-4 border-[rgba(255,255,255,0.8)] bg-[rgba(255,249,237,1)] shadow-lg shadow-[rgba(123,104,108,0.15)]">
                 {avatarPreview || avatarUrl ? (
-                  <img
+                  <Image
                     src={avatarPreview || avatarUrl!}
                     alt="Avatar"
-                    className="h-full w-full object-cover"
+                    fill
+                    className="object-cover"
+                    unoptimized
                   />
                 ) : (
                   <div className="flex h-full w-full items-center justify-center text-3xl text-[rgba(255,184,201,0.8)]">

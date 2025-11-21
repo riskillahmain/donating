@@ -37,8 +37,8 @@ export default function ResetPasswordPage() {
       // Usually better to redirect to home directly as they are logged in.
       router.push("/");
       router.refresh();
-    } catch (err: any) {
-      setError(err.message || "Gagal memperbarui password.");
+    } catch (err: unknown) {
+      setError((err as Error).message || "Gagal memperbarui password.");
     } finally {
       setLoading(false);
     }

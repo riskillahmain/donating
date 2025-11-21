@@ -29,12 +29,34 @@ export default function LeaderboardOverlayPage() {
   const [donors, setDonors] = useState<Donor[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [rawDonations, setRawDonations] = useState<any[]>([]);
+
+  // Recalculate donors whenever raw data changes
+  useEffect(() => {
+    const map: Record<string, number> = {};
+    rawDonations.forEach((d) => {
+      const name = d.sender_name || "Anonim";
+      map[name] = (map[name] || 0) + d.amount;
+    });
+
+    const aggregated: Donor[] = Object.entries(map)
+      .map(([name, amount]) => ({
+        name,
+        amount,
+        avatar: undefined
+      }))
+      .sort((a, b) => b.amount - a.amount); // Sort by highest amount
+
+    setDonors(aggregated);
+  }, [rawDonations]);
 
   useEffect(() => {
     if (!key) {
-      setError("Missing overlay key");
-      setLoading(false);
-      return;
+      const timer = setTimeout(() => {
+        setError("Missing overlay key");
+        setLoading(false);
+      }, 0);
+      return () => clearTimeout(timer);
     }
 
     const init = async () => {
@@ -62,7 +84,7 @@ export default function LeaderboardOverlayPage() {
           .eq('streamer_id', streamerId);
 
         if (donations) {
-          aggregateDonations(donations);
+          setRawDonations(donations);
         }
       };
 
@@ -81,12 +103,7 @@ export default function LeaderboardOverlayPage() {
             filter: `streamer_id=eq.${streamerId}`,
           },
           (payload) => {
-            // Add new donation to state and re-aggregate
-            setRawDonations((prev) => {
-              const next = [...prev, payload.new];
-              aggregateDonations(next);
-              return next;
-            });
+            setRawDonations((prev) => [...prev, payload.new]);
           }
         )
         .subscribe();
@@ -98,27 +115,6 @@ export default function LeaderboardOverlayPage() {
 
     init();
   }, [key, supabase]);
-
-  // Helper untuk menyimpan raw donations agar bisa di-update via realtime
-  const [rawDonations, setRawDonations] = useState<any[]>([]);
-
-  const aggregateDonations = (list: any[]) => {
-    setRawDonations(list); // Sync raw state
-    
-    const map: Record<string, number> = {};
-    list.forEach((d) => {
-      const name = d.sender_name || "Anonim";
-      map[name] = (map[name] || 0) + d.amount;
-    });
-
-    const aggregated: Donor[] = Object.entries(map).map(([name, amount]) => ({
-      name,
-      amount,
-      avatar: undefined // Kita belum punya avatar donatur di tabel donations
-    }));
-
-    setDonors(aggregated);
-  };
 
   if (loading) return <div className="text-white">Loading config...</div>;
   if (error) return <div className="text-red-500 bg-black p-4">{error}</div>;

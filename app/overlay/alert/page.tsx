@@ -28,9 +28,11 @@ export default function AlertOverlayPage() {
   // 1. Fetch Settings & Streamer ID by Key
   useEffect(() => {
     if (!key) {
-      setError("Missing overlay key");
-      setLoading(false);
-      return;
+      const timer = setTimeout(() => {
+        setError("Missing overlay key");
+        setLoading(false);
+      }, 0);
+      return () => clearTimeout(timer);
     }
 
     const init = async () => {
@@ -83,9 +85,12 @@ export default function AlertOverlayPage() {
   // 3. Process Queue
   useEffect(() => {
     if (!currentDonation && queue.length > 0) {
-      const next = queue[0];
-      setCurrentDonation(next);
-      setQueue((prev) => prev.slice(1));
+      const timer = setTimeout(() => {
+        const next = queue[0];
+        setCurrentDonation(next);
+        setQueue((prev) => prev.slice(1));
+      }, 0);
+      return () => clearTimeout(timer);
     }
   }, [currentDonation, queue]);
 

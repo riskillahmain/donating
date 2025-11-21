@@ -5,7 +5,6 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import AuthLayout from "@/components/auth/AuthLayout";
 import { createClient } from "@/utils/supabase/client";
-import { motion } from "framer-motion";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -33,8 +32,8 @@ export default function LoginPage() {
 
       router.push("/");
       router.refresh();
-    } catch (err: any) {
-      setError(err.message || "Gagal masuk. Coba lagi ya.");
+    } catch (err: unknown) {
+      setError((err as Error).message || "Gagal masuk. Coba lagi ya.");
     } finally {
       setLoading(false);
     }

@@ -57,7 +57,7 @@ export default function DonationForm({ streamerName, streamerId, allowMedia = tr
 
     try {
       // Insert to database
-      const donationData: any = {
+      const donationData: Record<string, any> = {
         streamer_id: streamerId,
         sender_name: senderName || "Anonim",
         message: message,
@@ -259,9 +259,10 @@ export default function DonationForm({ streamerName, streamerId, allowMedia = tr
       {/* Submit Button */}
       <button
         type="submit"
-        className="mt-2 w-full rounded-xl bg-[#3b2f32] py-4 text-sm font-bold text-white shadow-lg shadow-[#3b2f32]/10 transition-all hover:-translate-y-0.5 hover:bg-[#503e42] hover:shadow-xl active:scale-[0.98]"
+        disabled={loading}
+        className="mt-2 w-full rounded-xl bg-[#3b2f32] py-4 text-sm font-bold text-white shadow-lg shadow-[#3b2f32]/10 transition-all hover:-translate-y-0.5 hover:bg-[#503e42] hover:shadow-xl active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed"
       >
-        Dukung Rp {amount.toLocaleString("id-ID")}
+        {loading ? "Memproses..." : `Dukung Rp ${amount.toLocaleString("id-ID")}`}
       </button>
     </form>
   );

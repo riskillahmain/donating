@@ -2,6 +2,8 @@ import { notFound } from "next/navigation";
 import { createClient } from "@/utils/supabase/server";
 import DonationForm from "@/components/donation/DonationForm";
 import type { Metadata } from "next";
+import Image from "next/image";
+import Link from "next/link";
 
 // Force dynamic rendering because we depend on dynamic params
 export const dynamic = 'force-dynamic';
@@ -82,10 +84,12 @@ export default async function PublicCreatorPage({ params }: Props) {
         <div className="mb-8 flex flex-col items-center text-center">
           <div className="relative mb-4 h-24 w-24 overflow-hidden rounded-full border-4 border-white bg-[#fff0f5] shadow-[0_8px_20px_rgba(123,104,108,0.15)]">
             {profile.avatar_url ? (
-              <img
+              <Image
                 src={profile.avatar_url}
                 alt={profile.username}
-                className="h-full w-full object-cover"
+                fill
+                className="object-cover"
+                unoptimized
               />
             ) : (
               <div className="flex h-full w-full items-center justify-center text-3xl text-[rgba(255,184,201,0.8)]">
@@ -128,9 +132,9 @@ export default async function PublicCreatorPage({ params }: Props) {
         </div>
 
         <div className="mt-8 text-center">
-          <a href="/" className="text-xs font-medium text-[#9d878b] hover:text-[#3b2f32] transition-colors">
+          <Link href="/" className="text-xs font-medium text-[#9d878b] hover:text-[#3b2f32] transition-colors">
             Powered by <span className="font-serif">KreasiPay</span>
-          </a>
+          </Link>
         </div>
       </div>
     </div>
