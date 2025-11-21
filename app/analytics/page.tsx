@@ -14,7 +14,7 @@ export default function AnalyticsPage() {
   return (
     <RetroShell>
       <div className="mx-auto flex max-w-6xl flex-col gap-6">
-        <ScrollFadeIn as="section" className="retro-card p-4" amount={0.3}>
+        <ScrollFadeIn as={motion.section} className="retro-card p-4" amount={0.3}>
           <motion.div
             className="mb-2 flex items-center justify-between"
             variants={fadeUp}

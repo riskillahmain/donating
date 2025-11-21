@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import { motion, type MotionProps } from "framer-motion";
 
 const defaultVariants = {
@@ -9,7 +8,7 @@ const defaultVariants = {
 };
 
 type Props = {
-  as?: React.ElementType;
+  as?: keyof JSX.IntrinsicElements;
   children: React.ReactNode;
   className?: string;
   amount?: number;
@@ -22,10 +21,9 @@ export default function ScrollFadeIn({
   amount = 0.35,
   ...motionProps
 }: Props) {
-  const MotionComponent = motion(Component);
-
   return (
-    <MotionComponent
+    <motion.div
+      as={Component as never}
       className={className}
       variants={defaultVariants}
       initial="hidden"
@@ -35,6 +33,6 @@ export default function ScrollFadeIn({
       {...motionProps}
     >
       {children}
-    </MotionComponent>
+    </motion.div>
   );
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, AnimatePresence, type Variants } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 
 type ThemeOption = 'pink' | 'blue' | 'green' | 'purple';
 
@@ -72,7 +72,7 @@ const themes: Record<ThemeOption, {
 };
 
 // ... rowVariant ...
-const rowVariant: Variants = {
+const rowVariant = {
   hidden: { opacity: 0, y: 20, scale: 0.96 },
   visible: (i: number) => ({
     opacity: 1,
